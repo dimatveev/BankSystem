@@ -1,11 +1,13 @@
 #pragma once
 #include "Bank.h"
 #include "string"
+#include <iostream>
 
 struct Account {
  private:
   Bank& bank;
  public:
+  int account_id;
   std::string name;
   std::string surname;
   std::string address;
