@@ -1,19 +1,18 @@
 #pragma once
-#include <Bill.h>
+#include "Bill.h"
+
 struct AbstractFactory {
-  DebitBill& CreateDebit();
-  CreditBill& CreateCredit();
-  DepositBill& CreateDeposit();
+  static int bill_id;
 };
 
 struct DebitBillFactory : public AbstractFactory {
-  DebitBill& CreateDebit();
+  DebitBill CreateDebit();
 };
 
 struct CreditBillFactory : public AbstractFactory {
-  CreditBill& CreateCredit();
+  CreditBill CreateCredit();
 };
 
 struct DepositBillFactory : public AbstractFactory {
-  DepositBill& CreateDebit();
+  DepositBill CreateDeposit();
 };

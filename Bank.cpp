@@ -72,6 +72,8 @@ Account& Bank::LoginTo(std::string login, std::string password) {};  // ТРЕБ
 
 bool Bank::CreateBill(int type_of_bill, int account_id) {
   if (type_of_bill == -1) {
+    //    CreditBillFactory f;
+    //CreditBill newbill = f.CreateCredit();
     CreditBill newbill;  // тут должна быть фабрика
     newbill.unique_id = id_for_bills;
     newbill.money = 0;

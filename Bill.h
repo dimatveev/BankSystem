@@ -1,11 +1,12 @@
 #pragma once
-#include <time.h>
+#include <string>
 struct Bill {
   int money;
-  int unique_id;
+  int64_t unique_id;
   int limit_confirmed;
   int limit_uncomfired;
   int lowest_border;
+  Bill() = default;
 };
 
 struct DebitBill : public Bill{
@@ -17,6 +18,6 @@ struct CreditBill : public Bill {
 
 struct DepositBill : public Bill {
   double percent;
-  time_t data_created;
-  time_t period;
+  std::string data_created;
+  int period;
 };
