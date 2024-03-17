@@ -74,7 +74,7 @@ DepositBill DepositBillFactory::CreateDeposit() {
 }
 
 
-
+/*
 int main() {
   DebitBillFactory df;
   CreditBillFactory cf;
@@ -84,4 +84,4 @@ int main() {
   dpf.CreateDeposit();
  // af.CreateDebit();
  // af.CreateDebit();
-}
+}*/

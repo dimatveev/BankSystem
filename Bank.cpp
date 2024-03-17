@@ -72,27 +72,21 @@ Account& Bank::LoginTo(std::string login, std::string password) {};  // ТРЕБ
 
 bool Bank::CreateBill(int type_of_bill, int account_id) {
   if (type_of_bill == -1) {
-    //    CreditBillFactory f;
-    //CreditBill newbill = f.CreateCredit();
-    CreditBill newbill;  // тут должна быть фабрика
-    newbill.unique_id = id_for_bills;
-    newbill.money = 0;
+    CreditBillFactory cf;
+    CreditBill newbill = cf.CreateCredit();
     AddBillInFile(newbill, account_id);
   } else if (type_of_bill == 0) {
-    DebitBill newbill;  // тут должна быть фабрика
-    newbill.unique_id = id_for_bills;
-    newbill.money = 0;
+    DebitBillFactory df;
+    DebitBill newbill = df.CreateDebit();
     AddBillInFile(newbill, account_id);
   } else if (type_of_bill == 1) {
-    DepositBill newbill;  // тут должна быть фабрика
-    newbill.unique_id = id_for_bills;
-    newbill.money = 0;
+    DepositBillFactory dpf;
+    DepositBill newbill = dpf.CreateDeposit();
     AddBillInFile(newbill, account_id);
   } else {
     std::cout << "CreateBill error" << std::endl;
     return false;
   }
-  id_for_bills += 1;
   return true;
 }
 
@@ -176,8 +170,8 @@ bool Bank::Transaction(int bill_from, int bill_to, int amount_of_money) {
 
 int main() {
   Bank bank;
-  bank.CreateBill(1, 3);  // bill id = 0
-  bank.CreateBill(0, 4);  // bill id = 1
+  bank.CreateBill(1, 4);  // bill id = 0
+  bank.CreateBill(0, 5);  // bill id = 1
   bank.AddMoney(0, 1000);
   bank.Transaction(0, 1, 100);
 }
