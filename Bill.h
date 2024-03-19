@@ -8,16 +8,3 @@ struct Bill {
   int lowest_border;
   Bill() = default;
 };
-
-struct DebitBill : public Bill{
-};
-
-struct CreditBill : public Bill {
-  double Comission;
-};
-
-struct DepositBill : public Bill {
-  double percent;
-  std::string data_created;
-  int period;
-};

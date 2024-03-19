@@ -170,8 +170,8 @@ bool Bank::Transaction(int bill_from, int bill_to, int amount_of_money) {
 
 int main() {
   Bank bank;
-  bank.CreateBill(1, 4);  // bill id = 0
-  bank.CreateBill(0, 5);  // bill id = 1
-  bank.AddMoney(0, 1000);
-  bank.Transaction(0, 1, 100);
+  bank.CreateBill(1, 69);  // bill id = 0
+  bank.CreateBill(-1, 96);  // bill id = 1
+  bank.AddMoney(69, 1000);
+  bank.Transaction(69, 96, 300);
 }

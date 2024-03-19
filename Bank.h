@@ -2,7 +2,12 @@
 #include <string>
 #include <fstream>
 #include "AbstractFactory.h"
-#include "Bill.h"
+#include "DebitBillFactory.h"
+#include "CreditBillFactory.h"
+#include "DepositBillFactory.h"
+#include "CreditBill.h"
+#include "DebitBill.h"
+#include "DepositBill.h"
 //#include "Account.h"
 
 struct Bank {

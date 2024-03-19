@@ -28,5 +28,5 @@
 ## Запуск и Компиляция
 
 В настоящий момент основной функционал системы реализован в файлах `bank.cpp` и `account.cpp`. Они содержат код, позволяющий создавать банковские счета и осуществлять переводы между ними. Для компиляции и запуска кода достаточно использовать компилятор `g++` с поддержкой стандарта C++17:
-Пример: g++ Bank.cpp AbstractFactory.cpp --std=c++17 -o BankProject
+Пример: g++ Bank.cpp CreditBillFactory.cpp DebitBillFactory.cpp DepositBillFactory.cpp AbstractFactory.cpp --std=c++17 -o BankProject
 
