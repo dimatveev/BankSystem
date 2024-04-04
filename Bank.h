@@ -5,10 +5,10 @@
 #include "DebitBillFactory.h"
 #include "CreditBillFactory.h"
 #include "DepositBillFactory.h"
+#include "AccountBuilder.h"
 #include "CreditBill.h"
 #include "DebitBill.h"
 #include "DepositBill.h"
-//#include "Account.h"
 
 struct Bank {
   std::string name;
@@ -17,7 +17,7 @@ struct Bank {
   void AddBillInFile(CreditBill&, int);
   void AddBillInFile(DebitBill&, int);
   void AddBillInFile(DepositBill&, int);
-  void CreateAccount();
+  void CreateAccount(std::string&, std::string&, std::string&, std::string&, std::string&, int);
   //Account& LoginTo(std::string login, std::string password);  // password нельзя передовать как стринг
   bool CreateBill(int type_of_bill, int account_id);  // true если счёт создан
   void CheckBills(int account_id);

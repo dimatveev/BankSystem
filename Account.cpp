@@ -16,6 +16,8 @@ void Account::CreateBill(int type_of_bill) {
   }
 }
 
+Account::Account(Bank& mybank) : bank(mybank) {}
+
 void Account::CheckBills() {
   bank.CheckBills(account_id);
 }

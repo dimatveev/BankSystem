@@ -1,19 +1,18 @@
 #pragma once
 #include "Bank.h"
-#include "string"
+#include <string>
 #include <iostream>
 
 struct Account {
- private:
   Bank& bank;
- public:
   int account_id;
   std::string name;
   std::string surname;
   std::string address;
-  int passpor_num;
+  int passport_num;
   std::string login;
   std::string password;  // должны поменять
+  Account(Bank&);
   void CreateBill(int type_of_bill);
   void CheckBills();
   void CheckHistory();
