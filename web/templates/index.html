@@ -57,13 +57,13 @@
                 </div>
                 <div class="form-group">
                     <label for="passport">Номер паспорта:</label>
-                    <input type="text" class="form-control" id="passport" name="passport" pattern="\d{10}"
-                        title="Номер паспорта должен содержать 10 цифр" required>
-                </div>
+                    <input type="text" class="form-control" id="passport" name="passport" pattern="(\d{10}|-)"
+                        title="Номер паспорта должен содержать либо 10 цифр. Можете поставить '-' в поле и заполнить его потом" required>
+                </div>              
                 <div class="form-group">
-                    <label for="phone">Номер телефона:</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" pattern="\+?\d{10,13}"
-                        title="Введите номер телефона с 10 до 13 цифр" required>
+                    <label for="phone">Адрес:</label>
+                    <input type="tel" class="form-control" id="adress" name="adress" "
+                        title="Введите Адресс, можете ввести '-' и указать его позже" required>
                 </div>
                 <div class="form-group">
                     <label for="username">Имя пользователя:</label>

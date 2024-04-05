@@ -13,6 +13,14 @@ def index():
 def get_page_about():
     return render_template("about.html", h1="О приложении")
 
+@app.route("/customs")
+def customs():
+    return render_template("customs.html", h1="Наши услуги")
+
+@app.route("/contacts")
+def contacts():
+    return render_template("contacts.html", h1="Контакты")
+
 @app.route("/create_account", methods=["GET", "POST"])
 def create_account():
     if request.method == "POST":

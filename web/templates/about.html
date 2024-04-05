@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О банке</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 56px;
+        }
+        .navbar-custom, .btn-custom {
+            background-color: #08283d; /* Темно-синий цвет фона */
+            color: #ffffff; /* Белый цвет текста */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link, .btn-custom {
+            color: #ffffff; /* Белый цвет текста */
+        }
+        .navbar-custom .nav-link {
+            margin-right: 1rem; /* Отступ между ссылками */
+        }
+        .navbar-custom .nav-link:hover, .btn-custom:hover {
+            color: #cccccc; /* Цвет текста при наведении */
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Bank Logo" height="30">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/about">О нас <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/customs">Услуги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contacts">Контакты</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <h1 class="text-center mb-4">О банке</h1>
+    <p>Tegridy Bank был основан в 2024 году как специализированное финансовое учреждение, направленное на обслуживание сектора гэмблинга и казино. Наша цель - предоставить надежные и удобные финансовые решения для игроков и операторов казино.</p>
+    <p>Мы понимаем особенности гэмблинг-индустрии и стремимся обеспечить наших клиентов лучшими услугами, которые помогут им управлять своими средствами быстро и эффективно.</p>
+    <p>Основатели банка, Дмитрий Матвеев и Павел Дранов, с глубоким знанием рынка азартных игр, разработали продукты и услуги, которые отвечают уникальным требованиям этой ниши.</p>
+    <p>Мы гордимся тем, что предоставляем безопасную и прозрачную платформу для всех ваших финансовых операций в мире азартных игр.</p>
+    <p>Tegridy Bank был основан в 2024 году...</p>
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-custom">На главную</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

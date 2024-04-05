@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Особенности сайта</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 56px;
+        }
+        .navbar-custom {
+            background-color: #08283d;
+            color: #ffffff;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff;
+        }
+        .navbar-custom .nav-link {
+            margin-right: 1rem;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #cccccc;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .feature-list {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Bank Logo" height="30">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about">О нас</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/customs">Услуги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contacts">Контакты</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <h1 class="text-center mb-4">Что предоставляет Tegridy Bank</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title">Возможности пользователя:</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Создание счетов</li>
+                <li class="list-group-item">Перевод средств со счета на счет</li>
+            </ul>
+        </div>
+    </div>
+    <section class="py-5 text-center container">
+        <h2 class="fw-light">Наши счета и альбомы</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='debit.png') }}" class="card-img-top" alt="Дебетовый">
+                    <div class="card-body">
+                        <h5 class="card-title">Дебетовый счет</h5>
+                        <p class="card-text">Описание вашего дебетового счета.</p>
+                        <a href="/" class="btn btn-custom"">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='credit.png') }}" class="card-img-top" alt="Кредитный">
+                    <div class="card-body">
+                        <h5 class="card-title">Кредитный счет</h5>
+                        <p class="card-text">Описание вашего кредитного счета.</p>
+                        <a href="/" class="btn btn-custom"">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='deposit.png') }}" class="card-img-top" alt="Депозитный">
+                    <div class="card-body">
+                        <h5 class="card-title">Депозитный счет</h5>
+                        <p class="card-text">Описание вашего депозитного счета.</p>
+                        <a href="/" class="btn btn-custom"">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

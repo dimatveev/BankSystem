@@ -29,7 +29,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-custom">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Tegridy Bank Logo" height="30">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,16 +38,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">О нас</a>
+                    <a class="nav-link" href="/about">О нас</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Услуги</a>
+                    <a class="nav-link" href="/customs">Услуги</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Контакты</a>
+                    <a class="nav-link" href="/contacts">Контакты</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
@@ -67,7 +67,7 @@
         <p class="lead">Ваш надежный партнер в мире финансов.</p>
         <hr class="my-4">
         <p>Исследуйте наши услуги и найдите лучшие решения для личных и бизнес-целей.</p>
-        <a class="btn btn-custom btn-lg" href="#" role="button">Узнать больше</a>
+        <a class="btn btn-custom btn-lg" href="/customs" role="button">Узнать больше</a>
     </div>
 </div>
 
@@ -79,13 +79,18 @@
         </div>
         <div class="col-md-4">
             <h2>Бизнес-банкинг</h2>
-            <p>Решения для бизнеса любого размера.</p>
+            <p>Решения для бизнеса любого размера. Как говорили великие - 99% игроков останавливаются до того как выиграют миллиард</p>
         </div>
         <div class="col-md-4">
             <h2>Инвестиционные услуги</h2>
-            <p>Помощь в увеличении вашего капитала.</p>
+            <p>Помощь в увеличении вашего капитала с помощью онлайн-казино.</p>
         </div>
     </div>
+</div>
+
+<div class="container text-center"> <!-- Изменение в этой строке -->
+    <p>Чтобы воспользоваться нашими услугами, пожалуйста, создайте счет.</p>
+    <a class="btn btn-custom btn-lg" href="/create_account" role="button">Создать счет</a>
 </div>
 
 <footer class="footer mt-auto py-3 bg-light">
