@@ -14,9 +14,9 @@ CreditBill CreditBillFactory::CreateCredit() {
   newbill.limit_confirmed = 100000; //можно вывести 100к, дальше пишет что нельзя тк много(можно переписать типо бесконечность)
   newbill.lowest_border = -10000; // даем кредит на 10000 максимум
   // Создание unique_id
-  int64_t prefix = 14886957;
+  int64_t prefix = 200757;
   int64_t suffix = bill_id++;
-  newbill.unique_id = prefix * 100000000 + suffix;
+  newbill.unique_id = prefix + suffix;
   std::cout << "Ваш номер счета: " << newbill.unique_id << std::endl;
   newbill.Comission = 0.11;//11 процентов комса по кредиту
   std::cout << "Вам доступен кредит на сумму: " << newbill.limit_confirmed << "$" << std::endl;

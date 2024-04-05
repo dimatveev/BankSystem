@@ -14,9 +14,9 @@ DebitBill DebitBillFactory::CreateDebit() {
   newbill.limit_confirmed = 1000000; //можно вывести 1 миллион, дальше пишет что нельзя тк много(можно переписать типо бесконечность)
   newbill.lowest_border = 0;
   // Создание unique_id
-  int64_t prefix = 14886957;
+  int64_t prefix = 200757;
   int64_t suffix = bill_id++;
-  newbill.unique_id = prefix * 100000000 + suffix;
+  newbill.unique_id = prefix + suffix;
   std::cout << "Ваш номер счета: " << newbill.unique_id << std::endl;
   std::cout << std::endl;
   return newbill;
