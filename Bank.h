@@ -18,7 +18,7 @@ struct Bank {
   void AddBillInFile(DebitBill&, int);
   void AddBillInFile(DepositBill&, int);
   void CreateAccount(std::string, std::string, std::string, std::string, std::string, int);
-  //Account& LoginTo(std::string login, std::string password);  // password нельзя передовать как стринг
+  bool LoginTo(std::string login, std::string password);  // password нельзя передовать как стринг
   bool CreateBill(int type_of_bill, int account_id);  // true если счёт создан
   void CheckBills(int account_id);
   void CheckHistory(int account_id);

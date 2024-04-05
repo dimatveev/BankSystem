@@ -11,7 +11,7 @@ struct Account {
   std::string address;
   int passport_num;
   std::string login;
-  std::string password;  // должны поменять
+  std::string password_hash;
   Account(Bank&);
   void CreateBill(int type_of_bill);
   void CheckBills();

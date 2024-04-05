@@ -9,7 +9,7 @@ struct AccountBuilder : public Builder {
   std::string surname;
   std::string address;
   std::string login;
-  std::string password;
+  std::string password_hash;
   int passport_num;
   void Reset();
   void SetName(std::string&);

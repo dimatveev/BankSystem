@@ -37,7 +37,7 @@ void Bank::AddBillInFile(DepositBill& bill, int account_id) {
 void AddAccountInFile(Account& account) {
   std::ofstream file;
   file.open("bd_accounts.csv", std::ofstream::app);
-  file << std::to_string(account.account_id) << ',' << account.login << ',' << account.password << ',' 
+  file << std::to_string(account.account_id) << ',' << account.login << ',' << account.password_hash << ',' 
        << account.name << ',' << account.surname << ',' << account.address << ',' << std::to_string(account.passport_num) << "\n";
   file.close();
 }
@@ -101,10 +101,11 @@ std::vector<std::vector<std::string>> ReadFileBDHistory() {
 
 void Bank::CreateAccount(std::string login, std::string password, std::string name, std::string surname, std::string address, int passport_num) {
   AccountBuilder account_builder;
+  std::hash<std::string> passw_hash; 
   Account account = account_builder.GetAccount(*(this));
   account.account_id = id_for_accounts++;
   account.login = login;
-  account.password = password;
+  account.password_hash = std::to_string(passw_hash(password));
   account.name = name;
   account.surname = surname;
   account.address = address;
@@ -114,10 +115,19 @@ void Bank::CreateAccount(std::string login, std::string password, std::string na
 
 
 
-// функция для входа на сайт
-/*
-Account& Bank::LoginTo(std::string login, std::string password) {};  // ТРЕБУЕТ ДОРАБОТКИ
-*/
+// функция подтверждения входа на сайт
+
+bool Bank::LoginTo(std::string login, std::string password) {
+  auto vec = ReadFileBDAccounts();
+  std::hash<std::string> hash;
+  for (int i = 0; i < vec.size(); ++i) {
+    if (vec[i][1] == login) {
+      return std::to_string(hash(password)) == vec[i][2];
+    }
+  }
+  return false;
+}
+
 
 
 //функция создания счёта
@@ -142,7 +152,6 @@ bool Bank::CreateBill(int type_of_bill, int account_id) {
     std::cout << "CreateBill error" << std::endl;
     return false;
   }
-  id_for_bills += 1;
   return true;
 }
 
@@ -184,7 +193,7 @@ void AddOperInHis(std::string account_id, std::string oper_type, std::string bil
 
 // функция для проверки истории
 
-void Bank::CheckHistory(int account_id) {  // ТРЕБУЕТ ДОРАБОТКИ
+void Bank::CheckHistory(int account_id) {
   auto vec = ReadFileBDHistory();
   std::cout << "История операций\n";
   for (int i = 0; i < vec.size(); ++i) {
@@ -263,13 +272,14 @@ bool Bank::Transaction(int account_id_from, int account_id_to, int bill_from, in
 // тестирование
 int main() {
   Bank bank;
-  
   bank.CreateAccount("Paxan", "22848", "Pavel", "Dranov", "Pervomayskaya30k7", 224423); // account_id = 0
   bank.CreateAccount("DimaZ", "43348", "Dima", "Matveev", "Pervomayskaya30k7", 224424); // account_id = 1
   bank.CreateBill(1, 0);  // bill id = 200758
   bank.CreateBill(-1, 1);  // bill id = 200759
+  bank.CreateBill(0, 0);  // bill id = 200760
   bank.AddMoney(0, 200758, 1000);
   bank.Transaction(0, 1, 200758, 200759, 300);
   bank.CheckBills(0);
   bank.CheckHistory(0);
+  std::cout << bank.LoginTo("Paxan", "22849") << ' ' << bank.LoginTo("Paxan", "22848") << '\n';
 }

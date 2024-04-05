@@ -7,7 +7,7 @@ void AccountBuilder::Reset(){
   surname = "";
   address = "";
   login = "";
-  password = "";
+  password_hash = "";
   passport_num = 0;
   account_id += 1;
 }
@@ -32,8 +32,8 @@ void AccountBuilder::SetLogin(std::string& newlogin){
   login = newlogin;
 }
 
-void AccountBuilder::SetPassword(std::string& newpassword){
-  password = newpassword;
+void AccountBuilder::SetPassword(std::string& newpassword_hash){
+  password_hash = newpassword_hash;
 }
 
 Account AccountBuilder::GetAccount(Bank& mybank){
@@ -44,7 +44,7 @@ Account AccountBuilder::GetAccount(Bank& mybank){
   account.address = address;
   account.passport_num = passport_num;
   account.login = login;
-  account.password = password;
+  account.password_hash = password_hash;
   (*this).Reset();
   return account;
 }
