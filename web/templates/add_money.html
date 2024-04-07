@@ -2,28 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{{ username }} - Персональная страница</title>
+    <title>Добавление денег</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        .navbar-custom {
-            background-color: #08283d;
-        }
-        .navbar-custom .navbar-nav .nav-link,
-        .navbar-custom .navbar-brand {
-            color: white;
+        .card-deck {
+            margin-top: 20px;
         }
         .btn-custom {
             background-color: #08283d;
+            border-color: #08283d;
             color: white;
-            border: none;
         }
         .btn-custom:hover {
-            background-color: #33415c;
+            background-color: #061f2d;
+            border-color: #061f2d;
             color: white;
         }
-        .navbar-custom .navbar-nav .nav-link:hover {
-            color: #CCCCCC;
+        .btn-back {
+            background-color: #08283d;
+            color: white;
+            display: block;
+            margin: 0 auto;
+        }
+        .navbar-custom {
+            background-color: #08283d;
+        }
+        .navbar-custom .nav-link {
+            color: white;
         }
     </style>
 </head>
@@ -38,28 +44,27 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Logout</a>
+                    <a class="nav-link" href="/" style="color: white;">Logout</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container mt-5">
-        <h1 class="mb-4">Вы вошли в аккаунт {{ username }}</h1>
-        <div class="mb-3">
-            <a href="{{ url_for('create_bill', username=username) }}" class="btn btn-custom btn-lg btn-block">Создать счет</a>
-        </div>
-        <div class="mb-3">
-            <a href="{{ url_for('add_money', username=username) }}" class="btn btn-custom btn-lg btn-block">Пополнить баланс</a>
-        </div>
-        <div class="mb-3">
-            <a href="{{ url_for('transaction', username=username) }}" class="btn btn-custom btn-lg btn-block">Перевести деньги</a>
-        </div>
-        <div class="mb-3">
-            <a href="#" class="btn btn-custom btn-lg btn-block">Мои счета</a>
-        </div>
-        <div class="mb-3">
-            <a href="#" class="btn btn-custom btn-lg btn-block">История</a>
-        </div>
+        <h1 class="mb-4">Добавление денег на счет</h1>
+        <form action="{{ url_for('add_money', username=username) }}" method="POST">
+            <div class="form-group">
+                <label for="bill_to">Счет, на который зачислить</label>
+                <input type="text" class="form-control" id="bill_to" name="bill_to" placeholder="Введите номер счета">
+            </div>
+            <div class="form-group">
+                <label for="amount">Сумма</label>
+                <input type="text" class="form-control" id="amount" name="amount" placeholder="Введите сумму">
+            </div>
+            <button type="submit" class="btn btn-custom">Пополнить</button>
+        </form>
+    </div>
+    <div class="mt-5">
+        <a href="{{ url_for('user_page', username=username) }}" class="btn btn-back">Назад</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

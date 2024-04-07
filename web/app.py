@@ -36,8 +36,6 @@ def create_account():
         
         # После создания аккаунта перенаправление на главную страницу
         return redirect(url_for("index"))
-    
-    # Если метод GET, отображаем форму для создания аккаунта
     return render_template("index.html")
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -49,7 +47,6 @@ def login():
         session['username'] = username
         # Перенаправляем на персональную страницу пользователя
         return redirect(url_for('user_page', username=username))
-    # Если GET-запрос, отображаем страницу входа
     return render_template('login.html')
 
 @app.route('/user/<username>')
@@ -63,18 +60,46 @@ def user_page(username):
 
 @app.route('/user/<username>/create_bill', methods=['GET', 'POST'])
 def create_bill(username):
-    # Логика создания счета
-    pass
+    if request.method == 'POST':
+        bill_type = request.form.get('bill_type')
 
-@app.route('/user/<username>/deposit', methods=['GET', 'POST'])
-def deposit(username):
-    # Логика пополнения баланса
-    pass
+        # Логика создания счета в зависимости от выбора пользователя
+        if bill_type == 'deposit':
+            pass
+        elif bill_type == 'credit':
+            pass
+        elif bill_type == 'debit':
+            pass
+        else:
+            pass
 
-@app.route('/user/<username>/transfer', methods=['GET', 'POST'])
-def transfer(username):
-    # Логика перевода денег
-    pass
+        # После успешного создания счета перенаправляем пользователя на его страницу
+        return redirect(url_for('user_page', username=username))
+    return render_template('create_bill.html', username=username)
+
+@app.route('/user/<username>/add_money', methods=['GET', 'POST'])
+def add_money(username):
+    if request.method == 'POST':
+        bill_to = request.form.get('bill_to')
+        amount = request.form.get('amount')
+        
+        # логика для добавления денег
+        
+        return redirect(url_for('user_page', username=username))
+    return render_template('add_money.html', username=username)
+
+@app.route('/user/<username>/transaction', methods=['GET', 'POST'])
+def transaction(username):
+    if request.method == 'POST':
+        bill_from = request.form.get('bill_from')
+        bill_to = request.form.get('bill_to')
+        
+        # логика для перевода денег
+        
+        return redirect(url_for('user_page', username=username))
+    return render_template('transaction.html', username=username)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
