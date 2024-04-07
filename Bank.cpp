@@ -1,4 +1,3 @@
-
 #include "AccountBuilder.cpp"
 #include "AbstractFactory.cpp"
 #include "DebitBillFactory.cpp"
@@ -268,7 +267,7 @@ bool Bank::Transaction(int account_id_from, int account_id_to, int bill_from, in
   return true;
 }
 
-
+/*
 // тестирование
 int main() {
   Bank bank;
@@ -282,4 +281,4 @@ int main() {
   bank.CheckBills(0);
   bank.CheckHistory(0);
   std::cout << bank.LoginTo("Paxan", "22849") << ' ' << bank.LoginTo("Paxan", "22848") << '\n';
-}
+}*/
