@@ -15,9 +15,9 @@ DepositBill DepositBillFactory::CreateDeposit() {
   newbill.limit_confirmed = 10000000; //можно вывести 10мл, дальше пишет что нельзя тк много(можно переписать типо бесконечность)
   newbill.lowest_border = 0;
   // Создание unique_id
-  int64_t prefix = 14886957;
+  int64_t prefix = 200757;
   int64_t suffix = bill_id++;
-  newbill.unique_id = prefix * 100000000 + suffix;
+  newbill.unique_id = prefix+ suffix;
   // Получаем текущее время в формате "год-месяц-день часы:минуты:секунды"
   auto now = std::chrono::system_clock::now();
   auto in_time_t = std::chrono::system_clock::to_time_t(now);
