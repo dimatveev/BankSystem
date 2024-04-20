@@ -8,16 +8,3 @@
 #include <chrono>
 
 int AbstractFactory::bill_id = 1;
-//функции создающие счета
-
-/*
-int main() {
-  DebitBillFactory df;
-  CreditBillFactory cf;
-  DepositBillFactory dpf;
-  df.CreateDebit();
-  cf.CreateCredit();
-  dpf.CreateDeposit();
- // af.CreateDebit();
- // af.CreateDebit();
-}*/
