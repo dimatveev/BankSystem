@@ -13,7 +13,7 @@ struct Account {
   std::string login;
   std::string password_hash;
   Account(Bank&);
-  void CreateBill(int type_of_bill);
+  void CreateBill(BillType type_of_bill);
   void CheckBills();
   void CheckHistory();
   void Transaction(int bill_from, int bill_to, int amount_of_money);
