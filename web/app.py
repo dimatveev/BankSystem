@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+from flask import Flask, render_template, jsonify, request, request, redirect, url_for, session, abort
 from flask_bootstrap import Bootstrap
 from typing import Dict, Any
 import requests
@@ -23,9 +23,22 @@ def customs() -> str:
 def contacts() -> str:
     return render_template("contacts.html", h1="Контакты")
 
+def send_created_account(user_data: Dict[str, Any]) -> requests.Response:
+
+    # Отправляет данные пользователя на C++ сервер для создания аккаунта.
+
+    # :param user_data: Словарь с данными пользователя.
+    # :return: Ответ от сервера.
+
+    url = 'http://localhost:8888/create_account'
+    # Отправка POST-запроса на сервер C++
+    response = requests.post(url, json=user_data)
+    return response
+
 @app.route("/create_account", methods=["GET", "POST"])
 def create_account() -> Any:
     if request.method == "POST":
+        # Собираем данные пользователя из формы
         user_data: Dict[str, Any] = {
             "firstName": request.form.get("firstName"),
             "lastName": request.form.get("lastName"),
@@ -35,14 +48,21 @@ def create_account() -> Any:
             "password": request.form.get("password")
         }
 
-        response: requests.Response = requests.post('http://server_cpp/create_account', json=user_data)
-        
+        # Отправляем данные пользователя на сервер C++
+        response = send_created_account(user_data)
+
+        # Проверяем статус ответа от сервера
         if response.status_code == 200:
             return redirect(url_for("index"))
         else:
             abort(400, "Ошибка при создании аккаунта")
 
     return render_template("index.html")
+
+def send_login(login_data: Dict[str, str]) -> requests.Response:
+    url = 'http://localhost:8888/login'
+    response = requests.post(url, json=login_data)
+    return response
 
 @app.route('/login', methods=['GET', 'POST'])
 def login() -> Any:
@@ -52,8 +72,8 @@ def login() -> Any:
             "password": request.form['password']
         }
 
-        response: requests.Response = requests.post('http://server_cpp/login', json=login_data)
-        
+        response = send_login(login_data)
+
         if response.status_code == 200:
             session['username'] = login_data['username']
             return redirect(url_for('user_page', username=login_data['username']))
@@ -61,6 +81,11 @@ def login() -> Any:
             abort(401, "Неверное имя пользователя или пароль")
 
     return render_template('login.html')
+
+def send_bill(bill_data: Dict[str, str]) -> requests.Response:
+    url = 'http://localhost:8888/create_bill'
+    response = requests.post(url, json=bill_data)
+    return response
 
 @app.route('/user/<username>/create_bill', methods=['GET', 'POST'])
 def create_bill(username: str) -> Any:
@@ -70,14 +95,20 @@ def create_bill(username: str) -> Any:
             "bill_type": request.form.get('bill_type')
         }
 
-        response: requests.Response = requests.post('http://server_cpp/create_bill', json=bill_data)
-        
+        # Отправляем данные о счете через выделенную функцию
+        response = send_bill(bill_data)
+
         if response.status_code == 200:
             return redirect(url_for('user_page', username=username))
         else:
             abort(400, "Ошибка при создании счета")
 
     return render_template('create_bill.html', username=username)
+
+def send_money(money_data: Dict[str, Any]) -> requests.Response:
+    url = 'http://localhost:8888/add_money'
+    response = requests.post(url, json=money_data)
+    return response
 
 @app.route('/user/<username>/add_money', methods=['GET', 'POST'])
 def add_money(username: str) -> Any:
@@ -88,14 +119,20 @@ def add_money(username: str) -> Any:
             "amount": request.form.get('amount')
         }
 
-        response: requests.Response = requests.post('http://server_cpp/add_money', json=money_data)
-        
+        # Отправляем данные о добавлении денег через выделенную функцию
+        response = send_money(money_data)
+
         if response.status_code == 200:
             return redirect(url_for('user_page', username=username))
         else:
             abort(400, "Ошибка при добавлении денег")
 
     return render_template('add_money.html', username=username)
+
+def send_transaction(transaction_data: Dict[str, Any]) -> requests.Response:
+    url = 'http://localhost:8888/transaction'
+    response = requests.post(url, json=transaction_data)
+    return response
 
 @app.route('/user/<username>/transaction', methods=['GET', 'POST'])
 def transaction(username: str) -> Any:
@@ -107,8 +144,9 @@ def transaction(username: str) -> Any:
             "amount": request.form.get('amount')
         }
 
-        response: requests.Response = requests.post('http://server_cpp/transaction', json=transaction_data)
-        
+        # Отправляем данные транзакции через выделенную функцию
+        response = send_transaction(transaction_data)
+
         if response.status_code == 200:
             return redirect(url_for('user_page', username=username))
         else:
