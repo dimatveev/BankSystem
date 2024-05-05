@@ -48,6 +48,14 @@
             <h1 class="text-center mb-4">Добро пожаловать в наш банк!</h1>
             <form action="/create_account" method="post">
                 <div class="form-group">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="form-group">
                     <label for="firstName">Имя:</label>
                     <input type="text" class="form-control" id="firstName" name="firstName" required>
                 </div>
@@ -56,23 +64,15 @@
                     <input type="text" class="form-control" id="lastName" name="lastName" required>
                 </div>
                 <div class="form-group">
+                    <label for="phone">Адрес:</label>
+                    <input type="tel" class="form-control" id="address" name="address" "
+                        title="Введите Адресс, можете ввести '-' и указать его позже" required>
+                </div>
+                <div class="form-group">
                     <label for="passport">Номер паспорта:</label>
                     <input type="text" class="form-control" id="passport" name="passport" pattern="(\d{10}|-)"
                         title="Номер паспорта должен содержать либо 10 цифр. Можете поставить '-' в поле и заполнить его потом" required>
                 </div>              
-                <div class="form-group">
-                    <label for="phone">Адрес:</label>
-                    <input type="tel" class="form-control" id="adress" name="adress" "
-                        title="Введите Адресс, можете ввести '-' и указать его позже" required>
-                </div>
-                <div class="form-group">
-                    <label for="username">Имя пользователя:</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Пароль:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
                 <button type="submit" class="btn btn-custom btn-block">Создать аккаунт</button>
 
             </form>

@@ -1,11 +1,13 @@
-from flask import Flask, render_template, jsonify, request, request, redirect, url_for, session, abort
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session, abort
 from flask_bootstrap import Bootstrap
 from typing import Dict, Any
 import requests
+from bank import Bank
 
-app: Flask = Flask(__name__)
+app = Flask(__name__)
 app.secret_key = '2517'
-bootstrap: Bootstrap = Bootstrap(app)
+bootstrap = Bootstrap(app)
+bank = Bank()
 
 @app.route("/")
 def index() -> str:
@@ -23,64 +25,40 @@ def customs() -> str:
 def contacts() -> str:
     return render_template("contacts.html", h1="Контакты")
 
-def send_created_account(user_data: Dict[str, Any]) -> requests.Response:
-
-    # Отправляет данные пользователя на C++ сервер для создания аккаунта.
-
-    # :param user_data: Словарь с данными пользователя.
-    # :return: Ответ от сервера.
-
-    url = 'http://localhost:8888/create_account'
-    # Отправка POST-запроса на сервер C++
-    response = requests.post(url, json=user_data)
-    return response
-
 @app.route("/create_account", methods=["GET", "POST"])
 def create_account() -> Any:
     if request.method == "POST":
-        # Собираем данные пользователя из формы
-        user_data: Dict[str, Any] = {
-            "firstName": request.form.get("firstName"),
-            "lastName": request.form.get("lastName"),
-            "passport": request.form.get("passport"),
-            "phone": request.form.get("phone"),
-            "username": request.form.get("username"),
-            "password": request.form.get("password")
-        }
+        login = request.form.get("username")
+        password = request.form.get("password")
+        name = request.form.get("firstName")
+        surname = request.form.get("lastName")
+        address = request.form.get("address")
+        passport_num = request.form.get("passport")
 
-        # Отправляем данные пользователя на сервер C++
-        response = send_created_account(user_data)
-
-        # Проверяем статус ответа от сервера
-        if response.status_code == 200:
-            return redirect(url_for("index"))
-        else:
-            abort(400, "Ошибка при создании аккаунта")
-
-    return render_template("index.html")
-
-def send_login(login_data: Dict[str, str]) -> requests.Response:
-    url = 'http://localhost:8888/login'
-    response = requests.post(url, json=login_data)
-    return response
+        bank.create_account(login, password, name, surname, address, passport_num)
+        return redirect(url_for("index"))
+    else:
+        return render_template("index.html")
 
 @app.route('/login', methods=['GET', 'POST'])
-def login() -> Any:
+def login():
     if request.method == 'POST':
-        login_data: Dict[str, str] = {
-            "username": request.form['username'],
-            "password": request.form['password']
-        }
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        response = send_login(login_data)
-
-        if response.status_code == 200:
-            session['username'] = login_data['username']
-            return redirect(url_for('user_page', username=login_data['username']))
+        if bank.login_to(username, password):
+            session['username'] = username
+            return redirect(url_for('user_page', username=username))
         else:
-            abort(401, "Неверное имя пользователя или пароль")
+            return abort(401, "Неверное имя пользователя или пароль")
+    else:
+        return render_template('login.html')
 
-    return render_template('login.html')
+@app.route('/user/<username>')
+def user_page(username):
+    if 'username' in session and session['username'] == username:
+        return render_template('user_page.html', username=username)
+    return redirect(url_for('login'))
 
 def send_bill(bill_data: Dict[str, str]) -> requests.Response:
     url = 'http://localhost:8888/create_bill'
@@ -95,7 +73,6 @@ def create_bill(username: str) -> Any:
             "bill_type": request.form.get('bill_type')
         }
 
-        # Отправляем данные о счете через выделенную функцию
         response = send_bill(bill_data)
 
         if response.status_code == 200:
