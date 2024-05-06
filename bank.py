@@ -2,6 +2,7 @@ import csv
 import hashlib
 from bill import Bill
 import account
+
 # Константы для путей к файлам
 BD_BILLS = "bd_bills.csv"
 BD_ACCOUNTS = "bd_accounts.csv"
@@ -46,20 +47,43 @@ def add_operation_to_history(account_id, oper_type, bill_from, bill_to, amount_o
 # Структура банка
 class Bank:
     def __init__(self):
-        self.name = ""
-        self.id_for_bills = 0
-        self.id_for_accounts = 0
+        with open('id_for_accounts.csv', mode='r') as file_acc:
+            reader = csv.reader(file_acc)
+            self.id_for_accounts = int(next(reader)[0])
+        with open('id_for_bills.csv', mode='r') as file_bills:
+            reader = csv.reader(file_bills)
+            self.id_for_bills = int(next(reader)[0])  # Использование next для получения первой строки и преобразование в int
+
+        self.name = "TegridyBank"
+        self.active_account_id = -1
+    
+    def update_id_for_accounts(self):
+        with open('id_for_accounts.csv', mode='w') as file_acc:
+            writer = csv.writer(file_acc)
+            self.id_for_accounts = str(int(self.id_for_accounts) + 1)
+            writer.writerow([self.id_for_accounts])
+
+    def update_id_for_bills(self):
+        with open('id_for_bills.csv', mode='w') as file_bills:
+            writer = csv.writer(file_bills)
+            self.id_for_bills = str(int(self.id_for_bills) + 1)
+            writer.writerow([self.id_for_bills])        
 
     def create_account(self, login, password, name, surname, address, passport_num):
         newaccount = account.Account(self.id_for_accounts, login, hashlib.sha256(password.encode()).hexdigest(), name, surname, address, passport_num)
+        accs = read_file_bd_accounts()
+        for one_acc in accs:
+            if login == str(one_acc[1]):
+                return False
         add_account_in_file(newaccount)
-        self.id_for_accounts += 1
-        pass
+        self.update_id_for_accounts()
+        return True
 
     def login_to(self, login, password):
         bd_accounts = read_file_bd_accounts()
         for account in bd_accounts:
             if account[1] == login:
+                self.active_account_id = account[0]
                 return hashlib.sha256(password.encode()).hexdigest() == account[2]
         return False
 
@@ -67,7 +91,7 @@ class Bank:
         if bill_type == 'credit' or bill_type == 'debit' or bill_type == 'deposit':
             newbill = Bill(self.id_for_bills, bill_type, 0)
             add_bill_in_file(newbill, account_id)
-            self.id_for_bills += 1
+            self.update_id_for_bills()
         else:
             print("CreateBill error")
             return False
@@ -93,14 +117,17 @@ class Bank:
         pass
 
     def add_money(self, account_id, bill_to, amount_of_money):
+        found = False
         bills = read_file_bd_bills()
         for bill in bills:
             if bill[1] == str(bill_to):
+                found = True
                 bill[3] = str(int(bill[3]) + amount_of_money)
             newbill = Bill(bill[1], bill[2], bill[3])
             add_bill_in_file(newbill, bill[0])
-        add_operation_to_history(str(account_id), "Add money", "", "to " + str(bill_to), "+" + str(amount_of_money))
-        pass
+            add_operation_to_history(account_id, "Add money", "", bill_to, "+" + str(amount_of_money))
+        return found
+
 
     def withdraw_money(self, account_id, bill_from, amount_of_money):
         bills = read_file_bd_bills()
@@ -142,6 +169,7 @@ class Bank:
 
 # Тестирование
 if __name__ == "__main__":
+    '''
     bank = Bank()
     clear_bd()
     bank.create_account("Paxan", "22848", "Pavel", "Dranov", "Pervomayskaya30k7", 224423)
@@ -156,3 +184,4 @@ if __name__ == "__main__":
     bank.withdraw_money(228, 1, 290)
     bank.check_bills(0)
     bank.check_history(1)
+    '''

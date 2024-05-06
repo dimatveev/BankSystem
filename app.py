@@ -42,6 +42,7 @@ def create_account() -> Any:
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -50,10 +51,11 @@ def login():
             session['username'] = username
             return redirect(url_for('user_page', username=username))
         else:
-            return abort(401, "Неверное имя пользователя или пароль")
+            error = "Неверное имя пользователя или пароль"
+            return render_template('login.html', error=error)
     else:
-        return render_template('login.html')
-
+        return render_template('login.html', error=error)
+    
 @app.route('/user/<username>')
 def user_page(username):
     if 'username' in session and session['username'] == username:
@@ -67,20 +69,22 @@ def send_bill(bill_data: Dict[str, str]) -> requests.Response:
 
 @app.route('/user/<username>/create_bill', methods=['GET', 'POST'])
 def create_bill(username: str) -> Any:
+    message = None
     if request.method == 'POST':
-        bill_data: Dict[str, str] = {
-            "username": username,
-            "bill_type": request.form.get('bill_type')
-        }
+        bill_type = request.form.get('bill_type')
 
-        response = send_bill(bill_data)
-
-        if response.status_code == 200:
-            return redirect(url_for('user_page', username=username))
+        new_bill_id = bank.create_bill(bill_type, bank.active_account_id)
+        
+        if new_bill_id:
+            message = f"Вы создали {bill_type} счёт с номером {int(bank.id_for_bills) - 1}."
+            return render_template('create_bill.html', username=username, message=message)
         else:
-            abort(400, "Ошибка при создании счета")
+            message = "Ошибка при создании счета"
+            return render_template('create_bill.html', username=username, message=message)
+    else:
+        return render_template('create_bill.html', username=username)
 
-    return render_template('create_bill.html', username=username)
+
 
 def send_money(money_data: Dict[str, Any]) -> requests.Response:
     url = 'http://localhost:8888/add_money'
@@ -89,22 +93,31 @@ def send_money(money_data: Dict[str, Any]) -> requests.Response:
 
 @app.route('/user/<username>/add_money', methods=['GET', 'POST'])
 def add_money(username: str) -> Any:
+    error = None
     if request.method == 'POST':
-        money_data: Dict[str, Any] = {
-            "username": username,
-            "bill_to": request.form.get('bill_to'),
-            "amount": request.form.get('amount')
-        }
+        bill_to = request.form.get('bill_to')
+        amount = request.form.get('amount')
+        try:
+            amount = float(amount)
+        except ValueError:
+            error = "Некорректная сумма"
 
-        # Отправляем данные о добавлении денег через выделенную функцию
-        response = send_money(money_data)
+        if error is None:
+            account_id = bank.active_account_id
+            if account_id is None:
+                error = "Аккаунт не найден"
+            else:
+                success = bank.add_money(account_id, bill_to, amount)
+                if success:
+                    return redirect(url_for('user_page', username=username))
+                else:
+                    error = "Счет не найден"
 
-        if response.status_code == 200:
-            return redirect(url_for('user_page', username=username))
-        else:
-            abort(400, "Ошибка при добавлении денег")
+        # Если есть ошибка, выводим ее на странице
+        return render_template('add_money.html', username=username, error=error)
 
     return render_template('add_money.html', username=username)
+
 
 def send_transaction(transaction_data: Dict[str, Any]) -> requests.Response:
     url = 'http://localhost:8888/transaction'
