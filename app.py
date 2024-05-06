@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for, s
 from flask_bootstrap import Bootstrap
 from typing import Dict, Any
 import requests
+import csv
 from bank import Bank
 
 app = Flask(__name__)
@@ -84,13 +85,6 @@ def create_bill(username: str) -> Any:
     else:
         return render_template('create_bill.html', username=username)
 
-
-
-def send_money(money_data: Dict[str, Any]) -> requests.Response:
-    url = 'http://localhost:8888/add_money'
-    response = requests.post(url, json=money_data)
-    return response
-
 @app.route('/user/<username>/add_money', methods=['GET', 'POST'])
 def add_money(username: str) -> Any:
     error = None
@@ -113,36 +107,77 @@ def add_money(username: str) -> Any:
                 else:
                     error = "Счет не найден"
 
-        # Если есть ошибка, выводим ее на странице
         return render_template('add_money.html', username=username, error=error)
 
     return render_template('add_money.html', username=username)
 
-
-def send_transaction(transaction_data: Dict[str, Any]) -> requests.Response:
-    url = 'http://localhost:8888/transaction'
-    response = requests.post(url, json=transaction_data)
-    return response
-
 @app.route('/user/<username>/transaction', methods=['GET', 'POST'])
 def transaction(username: str) -> Any:
     if request.method == 'POST':
-        transaction_data: Dict[str, Any] = {
-            "username": username,
-            "bill_from": request.form.get('bill_from'),
-            "bill_to": request.form.get('bill_to'),
-            "amount": request.form.get('amount')
-        }
+        bill_from = request.form.get('bill_from')
+        bill_to = request.form.get('bill_to')
+        account_to = request.form.get('account_to')
+        amount = request.form.get('amount')
+        try:
+            amount = float(amount)
+        except ValueError:
+            return render_template('transaction.html', username=username, error="Некорректная сумма")
 
-        # Отправляем данные транзакции через выделенную функцию
-        response = send_transaction(transaction_data)
+        account_id_from = bank.active_account_id
 
-        if response.status_code == 200:
+        success = bank.transaction(account_id_from, account_to, bill_from, bill_to, amount)
+        if success:
             return redirect(url_for('user_page', username=username))
         else:
-            abort(400, "Ошибка при выполнении транзакции")
+            return render_template('transaction.html', username=username, error="Ошибка при выполнении транзакции")
+    else:
+        return render_template('transaction.html', username=username)
 
-    return render_template('transaction.html', username=username)
+@app.route('/user/<username>/my_bills', methods=['GET'])
+def my_bills(username: str):
+    if 'username' not in session or session['username'] != username:
+        return redirect(url_for('login'))
+
+    account_id = bank.active_account_id
+    if account_id is None:
+        return "Аккаунт не найден", 404
+
+    bills = []
+    with open('bd_bills.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == account_id:
+                bills.append({
+                    'bill_id': row[1],
+                    'type': row[2],
+                    'balance': row[3]
+                })
+
+    return render_template('my_bills.html', username=username, bills=bills)
+
+@app.route('/user/<username>/history', methods=['GET'])
+def history(username: str):
+    if 'username' not in session or session['username'] != username:
+        return redirect(url_for('login'))
+
+    account_id = bank.active_account_id
+    if account_id is None:
+        return "Аккаунт не найден", 404
+
+    transactions = []
+    with open('bd_history.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if str(account_id) == row[0]:
+                transactions.append({
+                    'type': row[1],
+                    'from': row[2],
+                    'to': row[3],
+                    'amount': row[4]
+                })
+
+    return render_template('history.html', username=username, transactions=transactions)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

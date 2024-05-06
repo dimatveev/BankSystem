@@ -122,7 +122,7 @@ class Bank:
         for bill in bills:
             if bill[1] == str(bill_to):
                 found = True
-                bill[3] = str(int(bill[3]) + amount_of_money)
+                bill[3] = str(int(float(bill[3])) + amount_of_money)
             newbill = Bill(bill[1], bill[2], bill[3])
             add_bill_in_file(newbill, bill[0])
             add_operation_to_history(account_id, "Add money", "", bill_to, "+" + str(amount_of_money))
@@ -135,10 +135,10 @@ class Bank:
         for bill in bills:
             if bill[1] == str(bill_from):
                 isfound = 1
-                if (int(bill[3]) < amount_of_money):
+                if (int(float(bill[3])) < amount_of_money):
                     isfound = -1
                 else:
-                    bill[3] = str(int(bill[3]) - amount_of_money)
+                    bill[3] = str(int(float(bill[3])) - amount_of_money)
             newbill = Bill(bill[1], bill[2], bill[3])
             add_bill_in_file(newbill, bill[0])
         add_operation_to_history(str(account_id), "Withdraw money", "", "from " + str(bill_from), "-" + str(amount_of_money))
@@ -150,10 +150,10 @@ class Bank:
         for bill in bills:
             if bill[1] == str(bill_from):
                 isfound = 1
-                if (int(bill[3]) < amount_of_money):
+                if (int(float(bill[3])) < amount_of_money):
                     isfound = -1
                 else:
-                    bill[3] = str(int(bill[3]) - amount_of_money)
+                    bill[3] = str(int(float(bill[3])) - amount_of_money)
             newbill = Bill(bill[1], bill[2], bill[3])
             add_bill_in_file(newbill, bill[0])
         bills = read_file_bd_bills()
@@ -162,7 +162,15 @@ class Bank:
             for bill in bills:
                 if bill[1] == str(bill_to):
                     isfound = 1
-                    bill[3] = str(int(bill[3]) + amount_of_money)
+                    bill[3] = str(int(float(bill[3])) + amount_of_money)
+                    add_operation_to_history(str(account_id_to), "transaction", "", "to " + str(bill_to), "+" + str(amount_of_money))
+                    add_operation_to_history(str(account_id_from), "transaction", "", "from " + str(bill_from), "+" + str(amount_of_money))
+                newbill = Bill(bill[1], bill[2], bill[3])
+                add_bill_in_file(newbill, bill[0])
+        else:
+            for bill in bills:
+                if bill[1] == str(bill_from):
+                        bill[3] = str(int(float(bill[3])) + amount_of_money)
                 newbill = Bill(bill[1], bill[2], bill[3])
                 add_bill_in_file(newbill, bill[0])
         return isfound

@@ -55,10 +55,10 @@
             <a href="{{ url_for('transaction', username=username) }}" class="btn btn-custom btn-lg btn-block">Перевести деньги</a>
         </div>
         <div class="mb-3">
-            <a href="#" class="btn btn-custom btn-lg btn-block">Мои счета</a>
+            <a href="{{ url_for('my_bills', username=username) }}" class="btn btn-custom btn-lg btn-block">Мои счета</a>
         </div>
         <div class="mb-3">
-            <a href="#" class="btn btn-custom btn-lg btn-block">История</a>
+            <a href="{{ url_for('history', username=username) }}" class="btn btn-custom btn-lg btn-block">История</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

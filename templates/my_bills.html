@@ -2,13 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Перевод денег</title>
+    <title>Мои счета</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        .card-deck {
-            margin-top: 20px;
-        }
         .btn-custom {
             background-color: #08283d;
             border-color: #08283d;
@@ -23,7 +20,7 @@
             background-color: #08283d;
             color: white;
             display: block;
-            margin: 0 auto;
+            margin-top: 20px;
         }
         .navbar-custom {
             background-color: #08283d;
@@ -50,28 +47,29 @@
         </div>
     </nav>
     <div class="container mt-5">
-        <h1 class="mb-4">Перевод денег</h1>
-        <form action="{{ url_for('transaction', username=username) }}" method="POST">
-            <div class="form-group">
-                <label for="bill_from">Счет, с которого перевести</label>
-                <input type="text" class="form-control" id="bill_from" name="bill_from" placeholder="Введите номер счета">
-            </div>
-            <div class="form-group">
-                <label for="bill_to">Счет, на который перевести</label>
-                <input type="text" class="form-control" id="bill_to" name="bill_to" placeholder="Введите номер счета">
-            </div>
-            <div class="form-group">
-                <label for="account_to">id аккаунта на который происходит перевод</label>
-                <input type="text" class="form-control" id="account_to" name="account_to" placeholder="Введите id пользователя">
-            </div>
-            <div class="form-group">
-                <label for="bill_to">Сумма</label>
-                <input type="text" class="form-control" id="amount" name="amount" placeholder="ВВедите сумму перевода">
-            </div>
-            <button type="submit" class="btn btn-custom">Перевести</button>
-        </form>
-    </div>
-    <div class="mt-5">
+        <h2>Счета пользователя {{ username }}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Номер счета</th>
+                    <th>Тип счета</th>
+                    <th>Баланс</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                <tr>
+                    <td>{{ bill.bill_id }}</td>
+                    <td>{{ bill.type }}</td>
+                    <td>{{ bill.balance }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">Нет счетов</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         <a href="{{ url_for('user_page', username=username) }}" class="btn btn-back">Назад</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
