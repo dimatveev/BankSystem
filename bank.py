@@ -118,7 +118,7 @@ class Bank:
 
     def add_money(self, account_id, bill_to, amount_of_money):
         if amount_of_money < 0:
-            return False
+            return "Некорректная сумма"
         found = False
         bills = read_file_bd_bills()
         for bill in bills:
@@ -127,7 +127,7 @@ class Bank:
                 bill[3] = str(int(float(bill[3])) + amount_of_money)
             newbill = Bill(bill[1], bill[2], bill[3])
             add_bill_in_file(newbill, bill[0])
-            add_operation_to_history(account_id, "Add money", "", bill_to, "+" + str(amount_of_money))
+        add_operation_to_history(account_id, "Add money", "", bill_to, "+" + str(amount_of_money))
         return found
 
 
@@ -150,18 +150,20 @@ class Bank:
 
     def transaction(self, account_id_from, account_id_to, bill_from, bill_to, amount_of_money):
         if amount_of_money < 0:
-            return -2
+            return "Некорректная сумма"
         bills = read_file_bd_bills()
-        isfound = 0
-        for bill in bills:
-            if bill[1] == str(bill_from) and bill[0] == str(account_id_from):
-                isfound = 1
-                if (int(float(bill[3])) < amount_of_money):
-                    isfound = -1
-                else:
-                    bill[3] = str(int(float(bill[3])) - amount_of_money)
-            newbill = Bill(bill[1], bill[2], bill[3])
-            add_bill_in_file(newbill, bill[0])
+        isfound = 404
+        if bills:
+            for bill in bills:
+                if len(bill) >= 4:  # Check if bill has enough elements
+                    if bill[1] == str(bill_from) and bill[0] == str(account_id_from):
+                        isfound = 1
+                        if (int(float(bill[3])) < amount_of_money):
+                            isfound = -1
+                        else:
+                            bill[3] = str(int(float(bill[3])) - amount_of_money)
+                    newbill = Bill(bill[1], bill[2], bill[3])
+                    add_bill_in_file(newbill, bill[0])
         bills = read_file_bd_bills()
         if isfound == 1:
             isfound = 0
@@ -171,6 +173,10 @@ class Bank:
                     bill[3] = str(int(float(bill[3])) + amount_of_money)
                     add_operation_to_history(str(account_id_to), "transaction", "", "to " + str(bill_to), "+" + str(amount_of_money))
                     add_operation_to_history(str(account_id_from), "transaction", "", "from " + str(bill_from), "+" + str(amount_of_money))
+                newbill = Bill(bill[1], bill[2], bill[3])
+                add_bill_in_file(newbill, bill[0])
+        elif isfound == 404:
+            for bill in bills:
                 newbill = Bill(bill[1], bill[2], bill[3])
                 add_bill_in_file(newbill, bill[0])
         else:

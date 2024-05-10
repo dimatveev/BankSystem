@@ -51,6 +51,11 @@
     </nav>
     <div class="container mt-5">
         <h1 class="mb-4">Перевод денег</h1>
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
         <form action="{{ url_for('transaction', username=username) }}" method="POST">
             <div class="form-group">
                 <label for="bill_from">Счет, с которого перевести</label>

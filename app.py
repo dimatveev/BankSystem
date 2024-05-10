@@ -93,6 +93,8 @@ def add_money(username: str) -> Any:
         amount = request.form.get('amount')
         try:
             amount = float(amount)
+            if amount < 0:
+                error = "Некорректная сумма"
         except ValueError:
             error = "Некорректная сумма"
 
@@ -107,12 +109,12 @@ def add_money(username: str) -> Any:
                 else:
                     error = "Счет не найден"
 
-        return render_template('add_money.html', username=username, error=error)
+    return render_template('add_money.html', username=username, error=error)
 
-    return render_template('add_money.html', username=username)
 
 @app.route('/user/<username>/transaction', methods=['GET', 'POST'])
 def transaction(username: str) -> Any:
+    error = None
     if request.method == 'POST':
         bill_from = request.form.get('bill_from')
         bill_to = request.form.get('bill_to')
@@ -120,18 +122,24 @@ def transaction(username: str) -> Any:
         amount = request.form.get('amount')
         try:
             amount = float(amount)
+            if amount < 0:
+                error = "Некорректная сумма"
         except ValueError:
-            return render_template('transaction.html', username=username, error="Некорректная сумма")
+            error = "Некорректная сумма"
 
-        account_id_from = bank.active_account_id
+        if error is None:
+            account_id_from = bank.active_account_id
+            result = bank.transaction(account_id_from, account_to, bill_from, bill_to, amount)
+            if isinstance(result, int) and result == 404:
+                error = f"У вас нет счета с номером {bill_from}"
+            elif result != 1:
+                error = "Ошибка при выполнении транзакции"
+            else:
+                return redirect(url_for('user_page', username=username))
 
-        success = bank.transaction(account_id_from, account_to, bill_from, bill_to, amount)
-        if success:
-            return redirect(url_for('user_page', username=username))
-        else:
-            return render_template('transaction.html', username=username, error="Ошибка при выполнении транзакции")
-    else:
-        return render_template('transaction.html', username=username)
+    return render_template('transaction.html', username=username, error=error)
+
+
 
 @app.route('/user/<username>/my_bills', methods=['GET'])
 def my_bills(username: str):
