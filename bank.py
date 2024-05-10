@@ -117,6 +117,8 @@ class Bank:
         pass
 
     def add_money(self, account_id, bill_to, amount_of_money):
+        if amount_of_money < 0:
+            return False
         found = False
         bills = read_file_bd_bills()
         for bill in bills:
@@ -130,6 +132,8 @@ class Bank:
 
 
     def withdraw_money(self, account_id, bill_from, amount_of_money):
+        if amount_of_money < 0:
+            return False
         bills = read_file_bd_bills()
         isfound = 0
         for bill in bills:
@@ -145,10 +149,12 @@ class Bank:
         return isfound
 
     def transaction(self, account_id_from, account_id_to, bill_from, bill_to, amount_of_money):
+        if amount_of_money < 0:
+            return -2
         bills = read_file_bd_bills()
         isfound = 0
         for bill in bills:
-            if bill[1] == str(bill_from):
+            if bill[1] == str(bill_from) and bill[0] == str(account_id_from):
                 isfound = 1
                 if (int(float(bill[3])) < amount_of_money):
                     isfound = -1
